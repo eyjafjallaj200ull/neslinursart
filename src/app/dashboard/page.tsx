@@ -1,6 +1,5 @@
 
 //import { createArtworkAction } from '@/actions/createArtwork'
-import { deleteArtworkAction } from '@/actions/deleteArtwork'
 import { getArtworks } from '@/lib/queries/getArtworks'
 import Link from 'next/link'
 import DeleteArtworkButton from './_components/DeleteArtworkButton'

@@ -1,6 +1,6 @@
 "use client"
 import { useSearchParams } from 'next/navigation'
-import { useRef, useEffect, JSX, MouseEvent, TouchEvent, useState } from 'react'
+import { useRef, useEffect, MouseEvent, TouchEvent, useState } from 'react'
 import Image from 'next/image'
 import { useRouter } from 'next/navigation'
 import { artworkSelectSchemaType } from '@/zod-schemas/artwork'

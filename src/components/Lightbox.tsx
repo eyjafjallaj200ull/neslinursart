@@ -1,6 +1,6 @@
 "use client"
 import { useSearchParams } from 'next/navigation'
-import { useRef, useEffect, JSX, MouseEvent, TouchEvent, useState } from 'react'
+import { useRef, useEffect, MouseEvent, TouchEvent, useState } from 'react'
 import Image from 'next/image'
 import { useRouter } from 'next/navigation'
 import { artworkSelectSchemaType } from '@/zod-schemas/artwork'
@@ -28,10 +28,18 @@ export default function Lightbox({artworks, dimensionsArray} : Props) {
     const dimensions = imageId ? getDimensions(dimensionsArray, Number(imageId)) : ""
 
     useEffect(() => {
+        const dialog = dialogRef.current
+        if (!dialog) return
         if (imageId) {
-            dialogRef.current?.showModal()
+            // Only open if not already open
+            if (!dialog.open) {
+                dialog.showModal()
+            }
         } else {
-            dialogRef.current?.close()
+            // Only close if open
+            if (dialog.open) {
+                dialog.close()
+            }
         }
     }, [imageId])
 
@@ -75,34 +83,31 @@ export default function Lightbox({artworks, dimensionsArray} : Props) {
             router.push(`/portfolio?imageId=${newImageId}`, {scroll: false})
         }
     }
+    
+    return (
+        <dialog onClick={e => handleDialogClick(e)} aria-label='image carousel' onClose={handleClose} className="fixed md:overflow-hidden left-[50%] top-[50%] z-50 translate-x-[-50%] translate-y-[-50%] flex justify-center items-center bg-transparent [&:not([open])]:pointer-events-none [&:not([open])]:opacity-0 [&[open]]:w-full [&[open]]:h-full" ref={dialogRef}>
+            {imageId && (
+            <>
+                <button className='text-white fixed h-full xl:h-auto pr-12 pl-10 left-0 bg-black/40 xl:bg-transparent xl:left-1/12 xl:p-6 hidden sm:inline-block cursor-pointer text-4xl font-bold outline-none' 
+                onClick={e => {
+                    e.stopPropagation()
+                    showPrev()
+                    }}>
+                    ⭠
+                </button>
 
-    const dialog: JSX.Element | null = imageId ? 
-    (
-        <dialog onClick={e => handleDialogClick(e)} aria-label='image carousel' onClose={handleClose} className="fixed md:overflow-hidden left-[50%] top-[50%] z-50 w-full h-full translate-x-[-50%] translate-y-[-50%]  backdrop:bg-black/85 flex justify-center items-center  bg-transparent" ref={dialogRef}>
+                <Image onTouchStart={e => setStartX(e.touches[0].clientX)} onTouchEnd={e => handleTouchEnd(e)} ref={imageRef} className={dimensions ? (dimensions.height > dimensions.width ? "md:w-[500px] md:h-auto" : "md:h-[500px] md:w-auto") : ""} src={`/images/${imagePath}`} width={dimensions ? dimensions.width : undefined} alt={name!} height={dimensions ? dimensions.height : undefined} />
 
-            <button className='text-white fixed h-full xl:h-auto pr-12 pl-10 left-0 bg-black/40 xl:bg-transparent xl:left-1/12 xl:p-6 hidden md:inline-block cursor-pointer text-4xl font-bold' 
-            onClick={e => {
-                e.stopPropagation()
-                showPrev()
-                }}>
-                ⭠
-            </button>
-
-            <Image onTouchStart={e => setStartX(e.touches[0].clientX)} onTouchEnd={e => handleTouchEnd(e)} ref={imageRef} className={dimensions ? (dimensions.height > dimensions.width ? "w-[500px] h-auto" : "h-[500px w-auto") : ""} src={`/images/${imagePath}`} width={dimensions ? dimensions.width : undefined} alt={name!} height={dimensions ? dimensions.height : undefined} />
-
-            <button className='text-white fixed h-full pl-12 pr-8 right-0 bg-black/40 xl:bg-transparent xl:right-1/12 xl:p-6 xl:h-auto hidden md:inline-block cursor-pointer text-4xl font-bold' 
-            onClick={e => {
-                e.stopPropagation()
-                showNext()
-                }}>
-                ⭢
-            </button>
-            <button className='text-white p-4 fixed top-0 right-0 text-4xl cursor-pointer font-sans'>X</button>
+                <button className='text-white fixed h-full pl-12 pr-8 right-0 bg-black/40 xl:bg-transparent xl:right-1/12 xl:p-6 xl:h-auto hidden sm:inline-block cursor-pointer text-4xl font-bold outline-none' 
+                onClick={e => {
+                    e.stopPropagation()
+                    showNext()
+                    }}>
+                    ⭢
+                </button>
+                <button className='text-white p-4 fixed top-0 right-0 text-4xl cursor-pointer font-sans outline-none'>X</button>
+            </>
+            )}
         </dialog>
     )
-    :
-    null
-    
-    return dialog
-
 }

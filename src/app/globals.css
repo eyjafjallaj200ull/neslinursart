@@ -24,3 +24,7 @@ body {
   background: var(--background);
   color: var(--foreground);
 }
+
+dialog::backdrop {
+  background: rgba(0, 0, 0, 0.8);
+}

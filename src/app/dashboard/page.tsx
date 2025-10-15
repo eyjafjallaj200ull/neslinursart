@@ -1,6 +1,6 @@
 
 //import { createArtworkAction } from '@/actions/createArtwork'
-import { getArtworks } from '@/lib/queries/getArtworks'
+import { getArtworks } from "@/dal/artworks"
 import Link from 'next/link'
 import DeleteArtworkButton from './_components/DeleteArtworkButton'
 

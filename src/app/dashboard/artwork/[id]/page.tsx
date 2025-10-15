@@ -1,7 +1,5 @@
-import { db } from "@/db"
-import { artworksTable } from "@/db/schema"
-import { eq } from "drizzle-orm"
 import ArtworkForm from "../../_components/ArtworkForm"
+import { getArtworkById } from "@/dal/artworks"
 
 export default async function EditArtworkPage({
     params
@@ -9,7 +7,6 @@ export default async function EditArtworkPage({
     params: Promise<{id: string}>
 }) {
     const { id } = await params
-    const artworkSelect = await db.select().from(artworksTable).where(eq(artworksTable.id, Number(id)))
-    const artwork = artworkSelect[0]
+    const artwork = await getArtworkById(Number(id))
     return <ArtworkForm artwork={artwork} />
 }

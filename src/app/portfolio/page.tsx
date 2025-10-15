@@ -1,4 +1,4 @@
-import { getArtworks } from "@/lib/queries/getArtworks";
+import { getArtworks } from "@/dal/artworks"
 import Gallery from "@/components/Gallery";
 
 export default async function PortfolioPage() {

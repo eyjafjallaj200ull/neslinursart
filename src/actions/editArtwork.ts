@@ -1,14 +1,12 @@
 "use server"
 
-import { db } from "@/db"
-import { artworksTable } from "@/db/schema"
 import { editArtworkSchema } from "@/zod-schemas/artwork"
-import { eq } from "drizzle-orm"
 import { notFound } from "next/navigation"
 import fs from "fs/promises"
 import { revalidatePath } from "next/cache"
 import z from "zod/v4"
 import { ActionResponse } from "@/types/action-response"
+import { getArtworkById, updateArtwork } from "@/dal/artworks"
 
 export async function editArtworkAction (id: number, prevState: ActionResponse | null, formData: FormData): Promise<ActionResponse> {
     const formDataObject = Object.fromEntries(formData.entries())
@@ -26,10 +24,9 @@ export async function editArtworkAction (id: number, prevState: ActionResponse |
         }
     }
     const data = validatedFields.data
-    const artworkSelect = await db.select().from(artworksTable).where(eq(artworksTable.id, id))
+    const artwork = await getArtworkById(id)
 
-    if(!artworkSelect) return notFound()
-    const artwork = artworkSelect[0]
+    if(!artwork) return notFound()
     let imagePath = artwork.imagePath
     if (data.image != null && data.image.size > 0) {
         await fs.unlink(`public/images/${artwork.imagePath}`)
@@ -39,11 +36,7 @@ export async function editArtworkAction (id: number, prevState: ActionResponse |
             Buffer.from(await data.image.arrayBuffer())
         )
     }
-    await db.update(artworksTable).set({
-        name: data.name,
-        year: data.year,
-        imagePath
-    }).where(eq(artworksTable.id, id))
+    await updateArtwork(id, data, imagePath)
 
     revalidatePath("/")
     revalidatePath("/portfolio")

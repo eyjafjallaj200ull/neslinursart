@@ -1,8 +1,6 @@
 "use server"
 
 //import { flattenValidationErrors } from "next-safe-action"
-import { db } from "../db"
-import { artworksTable } from "@/db/schema"
 import z from "zod"
 import fs from "fs/promises"
 import { createArtworkSchema } from "@/zod-schemas/artwork"
@@ -10,6 +8,7 @@ import { createArtworkSchema } from "@/zod-schemas/artwork"
 //import { getKindeServerSession } from "@kinde-oss/kinde-auth-nextjs/server"
 //import { redirect } from "next/navigation"
 import { ActionResponse } from "@/types/action-response"
+import { createArtwork } from "@/dal/artworks"
 
 // export const createArtworkAction = actionClient
 //     .metadata({ actionName: "createArtworkAction" })
@@ -70,7 +69,7 @@ export async function createArtworkAction(prevState: ActionResponse | null, form
     imagePath: imagePath
   }
 
-  const result = await db.insert(artworksTable).values(newArtwork).returning({ insertedId: artworksTable.id})
+  const result = await createArtwork(newArtwork)
   console.log(result)
   return {
     success: true,

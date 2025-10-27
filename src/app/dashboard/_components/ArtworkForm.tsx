@@ -23,6 +23,7 @@ export default function ArtworkForm ({artwork} : {artwork?: artworkSelectSchemaT
                 <input 
                     className="border-foreground border-solid border-1 p-1 outline-none"
                     type="text"
+                    id="name"
                     name="name"
                     required
                     defaultValue={artwork ? artwork.name : `${state.inputs?.name ?? ""}`}
@@ -34,6 +35,7 @@ export default function ArtworkForm ({artwork} : {artwork?: artworkSelectSchemaT
                 <input 
                     className="border-foreground border-solid border-1 p-1 outline-none"
                     type="text"
+                    id="year"
                     name="year"
                     required
                     defaultValue={artwork ? artwork.year : `${state.inputs?.year ?? ""}`}
@@ -45,6 +47,7 @@ export default function ArtworkForm ({artwork} : {artwork?: artworkSelectSchemaT
                 <input 
                     className="border-foreground border-solid border-1 p-1 outline-none cursor-pointer"
                     type="file"
+                    id="image"
                     name="image"
                     required={!artwork}
                 />

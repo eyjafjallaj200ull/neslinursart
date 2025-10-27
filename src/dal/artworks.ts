@@ -12,7 +12,7 @@ import { getKindeServerSession } from "@kinde-oss/kinde-auth-nextjs/server";
 import { redirect } from "next/navigation";
 
 export async function getArtworks({orderBy}: {orderBy?: boolean}) {
-    const artworks = await orderBy ? db.select().from(artworksTable).orderBy(artworksTable.name) : db.select().from(artworksTable)
+    const artworks = orderBy ? await db.select().from(artworksTable).orderBy(artworksTable.name) : await db.select().from(artworksTable)
     return artworks
 }
 

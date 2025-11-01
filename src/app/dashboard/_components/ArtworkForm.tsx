@@ -52,7 +52,7 @@ export default function ArtworkForm ({artwork} : {artwork?: artworkSelectSchemaT
                     required={!artwork}
                 />
                 {!!artwork && (
-                    <img className="size-72 justify-self-center my-5 object-cover" alt={artwork.name} src={`/images/${artwork.imagePath}`} />
+                    <img className="size-72 justify-self-center my-5 object-cover" alt={artwork.name} src={artwork.imagePath} />
                 )}
                 {state?.errors?.image ?? ""}
             </div>

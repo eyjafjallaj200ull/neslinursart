@@ -8,6 +8,20 @@
       "when": 1759585700117,
       "tag": "0000_curved_lilith",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1761918769513,
+      "tag": "0001_burly_scalphunter",
+      "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1761982949961,
+      "tag": "0002_fancy_captain_midlands",
+      "breakpoints": true
     }
   ]
 }

@@ -2,11 +2,13 @@
 
 import { editArtworkSchema } from "@/zod-schemas/artwork"
 import { notFound } from "next/navigation"
-import fs from "fs/promises"
 import { revalidatePath } from "next/cache"
 import z from "zod/v4"
 import { ActionResponse } from "@/types/action-response"
 import { getArtworkById, updateArtwork } from "@/dal/artworks"
+import { del, put } from "@vercel/blob"
+import { deleteImageDimensions, insertImageDimensions } from "@/dal/imageDimensions"
+import imageSize from "image-size"
 
 export async function editArtworkAction (id: number, prevState: ActionResponse | null, formData: FormData): Promise<ActionResponse> {
     const formDataObject = Object.fromEntries(formData.entries())
@@ -29,12 +31,22 @@ export async function editArtworkAction (id: number, prevState: ActionResponse |
     if(!artwork) return notFound()
     let imagePath = artwork.imagePath
     if (data.image != null && data.image.size > 0) {
-        await fs.unlink(`public/images/${artwork.imagePath}`)
-        imagePath = `${crypto.randomUUID()}-${data.image.name}`
-        await fs.writeFile(
-            `public/images/${imagePath}`,
-            Buffer.from(await data.image.arrayBuffer())
-        )
+        await del(artwork.imagePath)
+        await deleteImageDimensions(id)
+        const imageFile = formData.get('image') as File;
+        const blob = await put(imageFile.name, imageFile, {
+            access: 'public',
+            addRandomSuffix: true,
+        });
+
+        imagePath = blob.url
+        const imageDimensions = imageSize(new Uint8Array(await data.image.arrayBuffer()))
+        const dimensions = await insertImageDimensions({
+            imageId: id,
+            width: imageDimensions.width || 0,
+            height: imageDimensions.height || 0
+        })
+        console.log("dims", dimensions)
     }
     await updateArtwork(id, data, imagePath)
 

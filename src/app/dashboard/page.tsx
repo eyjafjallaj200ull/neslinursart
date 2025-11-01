@@ -28,7 +28,7 @@ import DeleteArtworkButton from './_components/DeleteArtworkButton'
 
 export default async function Dashboard() {
   const artworks = await getArtworks({orderBy: true})
-  if(artworks.length === 0) return <p>There are no artworks yet.</p>
+  if(artworks.length === 0) return <p>There are no artworks yet. <Link className='self-end text-lg font-bold mt-5 mr-10' href="dashboard/artwork/new" >Add new artwork</Link></p>
   
   return (
     <div className='w-2/3 mx-auto flex flex-col items-center'>

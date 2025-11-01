@@ -16,6 +16,8 @@ export default function GalleryImage ({src, alt, className, title, year, dimensi
         <div className=" mb-5">
             <div className={`relative text-center text-transparent hover:text-[#ededed] transition-all cursor-pointer ${className}`}>
                 <Image 
+                priority={!!(title === "A Neighbourhood")}
+                fetchPriority={!!(title === "A Neighbourhood") ? "high" : "auto"}
                 className={` `} 
                 src={src} 
                 alt={alt} 

@@ -21,7 +21,6 @@ export default function Lightbox({artworks, dimensionsArray} : Props) {
     const imageRef = useRef<null | HTMLImageElement>(null)
     const imageId = searchParams.get('imageId')
     const router = useRouter()
-    const [startX, setStartX] = useState(0)
     const imageIndex = imageId ? artworks.findIndex((imageObj) => imageObj.id.toString() === imageId) : -1;
     const {name, imagePath} = imageId ? artworks[imageIndex] : {name: "", imagePath: ""};
     const dimensions = imageId ? dimensionsArray.find(dimObj => dimObj.id === Number(imageId))?.dimensions ?? {height:0, width: 0} : null
@@ -52,16 +51,6 @@ export default function Lightbox({artworks, dimensionsArray} : Props) {
         }
     }
 
-    function handleTouchEnd(e: TouchEvent<HTMLImageElement>) {
-        const endX = e.changedTouches[0].clientX
-        const deltaX = endX - startX
-        if (deltaX > 0) {
-            showPrev()
-        }
-        if (deltaX < 0) {
-            showNext()
-        }
-    }
 
     function showNext () {
         if (imageIndex + 1 < artworks.length) {
@@ -87,7 +76,7 @@ export default function Lightbox({artworks, dimensionsArray} : Props) {
         <dialog onClick={e => handleDialogClick(e)} aria-label='image carousel' onClose={handleClose} className="fixed md:overflow-hidden left-[50%] top-[50%] z-50 translate-x-[-50%] translate-y-[-50%] flex justify-center items-center bg-transparent [&:not([open])]:pointer-events-none [&:not([open])]:opacity-0 [&[open]]:w-full [&[open]]:h-full" ref={dialogRef}>
             {!!imageId && imageIndex > -1 ? (
             <>
-                <button className='text-white fixed h-full xl:h-auto pr-12 pl-10 left-0 bg-black/40 xl:bg-transparent xl:left-1/12 xl:p-6 hidden sm:inline-block cursor-pointer text-4xl font-bold outline-none' 
+                <button className='text-white fixed md:h-full xl:h-auto md:pr-12 md:pl-10 left-0 md:bg-black/40 xl:bg-transparent xl:left-1/12 xl:p-6 cursor-pointer text-4xl font-bold outline-none' 
                 onClick={e => {
                     e.stopPropagation()
                     showPrev()
@@ -95,9 +84,9 @@ export default function Lightbox({artworks, dimensionsArray} : Props) {
                     ⭠
                 </button>
 
-                <Image onTouchStart={e => setStartX(e.touches[0].clientX)} onTouchEnd={e => handleTouchEnd(e)} ref={imageRef} className={dimensions ? (dimensions.height > dimensions.width ? "md:w-[500px] md:h-auto" : "md:h-[500px] md:w-auto") : ""} src={imagePath} width={dimensions ? dimensions.width : undefined} alt={name!} height={dimensions ? dimensions.height : undefined} />
+                <Image ref={imageRef} className={dimensions ? (dimensions.height > dimensions.width ? "md:w-[500px] md:h-auto" : "md:h-[500px] md:w-auto") : ""} src={imagePath} width={dimensions ? dimensions.width : 100} alt={name!} height={dimensions ? dimensions.height : 100} />
 
-                <button className='text-white fixed h-full pl-12 pr-8 right-0 bg-black/40 xl:bg-transparent xl:right-1/12 xl:p-6 xl:h-auto hidden sm:inline-block cursor-pointer text-4xl font-bold outline-none' 
+                <button className='text-white fixed md:h-full md:pl-12 md:pr-10 right-0 md:bg-black/40 xl:bg-transparent xl:right-1/12 xl:p-6 xl:h-auto  cursor-pointer text-4xl font-bold outline-none' 
                 onClick={e => {
                     e.stopPropagation()
                     showNext()

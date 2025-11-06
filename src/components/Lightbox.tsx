@@ -1,5 +1,5 @@
 "use client"
-import { useSearchParams } from 'next/navigation'
+import { notFound, useSearchParams } from 'next/navigation'
 import { useRef, useEffect, MouseEvent, TouchEvent, useState } from 'react'
 import Image from 'next/image'
 import { useRouter } from 'next/navigation'
@@ -22,7 +22,7 @@ export default function Lightbox({artworks, dimensionsArray} : Props) {
     const imageId = searchParams.get('imageId')
     const router = useRouter()
     const imageIndex = imageId ? artworks.findIndex((imageObj) => imageObj.id.toString() === imageId) : -1;
-    const {name, imagePath} = imageId ? artworks[imageIndex] : {name: "", imagePath: ""};
+    const {name, imagePath} = imageId && imageIndex > -1 ? artworks[imageIndex] : {name: "", imagePath: ""};
     const dimensions = imageId ? dimensionsArray.find(dimObj => dimObj.id === Number(imageId))?.dimensions ?? {height:0, width: 0} : null
 
     useEffect(() => {

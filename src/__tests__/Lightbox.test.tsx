@@ -1,5 +1,5 @@
 import { render, screen, fireEvent } from "@testing-library/react"
-import Lightbox from "@/components/Lightbox"
+import Lightbox from "@/components/Portfolio/Lightbox"
 import { vi } from "vitest"
 import userEvent from "@testing-library/user-event"
 

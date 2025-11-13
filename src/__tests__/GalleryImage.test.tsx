@@ -1,5 +1,5 @@
 import { render, screen } from "@testing-library/react"
-import GalleryImage from "@/components/GalleryImage"
+import GalleryImage from "@/components/Portfolio/GalleryImage"
 
 describe("GalleryImage", () => {
     it("renders image with correct src, alt, title, year, and dimensions", () => {

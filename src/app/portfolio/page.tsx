@@ -1,5 +1,5 @@
 import { getArtworks } from "@/dal/artworks"
-import Gallery from "@/components/Gallery";
+import Gallery from "@/components/Portfolio/Gallery";
 import { getImageDimensionsByImageId } from "@/dal/imageDimensions";
 
 export default async function PortfolioPage() {

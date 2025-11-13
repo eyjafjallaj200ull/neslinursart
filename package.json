@@ -19,6 +19,8 @@
     "dotenv": "^17.2.2",
     "drizzle-orm": "^0.44.2",
     "drizzle-zod": "^0.8.3",
+    "embla-carousel-autoplay": "^8.6.0",
+    "embla-carousel-react": "^8.6.0",
     "image-size": "^2.0.2",
     "next": "^15.5.5",
     "next-safe-action": "^8.0.11",

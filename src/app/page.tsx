@@ -5,7 +5,7 @@ export default function Home() {
   return (
     <main>
       <Carousel />
-      <Link className="flex justify-end text-xl mr-10 mt-10 sm:hidden" href="/portfolio">See all artworks</Link>
+      <Link className="float-right mr-5 mt-10 text-lg p-1 rounded-md border-solid border-foreground border-1 sm:hidden" href="/portfolio">See all artworks</Link>
     </main> 
   );
 }

@@ -5,7 +5,7 @@ type Props = {
 
 function HamburgerButton({onClick, mobileMenuOpen}: Props) {
   return (
-    <button onClick={onClick} className="md:hidden flex flex-col justify-center items-center">
+    <button aria-label="Toggle menu" onClick={onClick} className="md:hidden flex flex-col justify-center items-center">
         <span className={`bg-[var(--foreground)] block transition-all duration-300 ease-out 
             h-0.5 w-6 rounded-sm ${mobileMenuOpen ? 
             'rotate-45 translate-y-1' : '-translate-y-0.5'

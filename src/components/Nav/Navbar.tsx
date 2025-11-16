@@ -10,7 +10,7 @@ function Navbar({children}: {children?: React.ReactNode}) {
 
     return (
         <div className={`border-b border-[var(--foreground)] flex flex-wrap items-center justify-between px-4 py-5 gap-4 text-xl underline-offset-7`}>
-                    <h1 className="">Neslinur&apos;s Art</h1>
+                    <Link href="/" className="">Neslinur&apos;s Art</Link>
                     <nav className={`hidden md:flex gap-4 `}>
                         <Link className={`hover:underline ${pathName === "/" ? "underline" : ""}`} href="/">Home</Link>
                         <Link className={`hover:underline ${pathName === "/about" ? "underline" : ""} `} href="/about">About</Link>

@@ -17,7 +17,7 @@ function Navbar({children}: {children?: React.ReactNode}) {
                         <Link className={`hover:underline ${pathName === "/portfolio" ? "underline" : ""} `} href="/portfolio">Portfolio</Link>
                     </nav>
                     <nav className="flex gap-4">
-                        <Link className="hidden md:inline-block" href="/checkout">Etsy Shop</Link>
+                        <a className="hidden md:inline-block" target='_blank' href="https://www.etsy.com/shop/Neslinursart">Etsy Shop</a>
                         {isAuthenticated && 
                             (
                             <>

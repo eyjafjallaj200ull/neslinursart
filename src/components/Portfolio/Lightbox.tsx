@@ -1,10 +1,11 @@
 "use client"
-import { notFound, useSearchParams } from 'next/navigation'
+import { useSearchParams } from 'next/navigation'
 import { useRef, useEffect, MouseEvent, TouchEvent, useState } from 'react'
 import Image from 'next/image'
 import { useRouter } from 'next/navigation'
 import { artworkSelectSchemaType } from '@/zod-schemas/artwork'
 import { ISizeCalculationResult } from 'image-size/types/interface'
+import { ArrowRight, ArrowLeft } from 'lucide-react';
 
 
 type Props = {
@@ -81,7 +82,7 @@ export default function Lightbox({artworks, dimensionsArray} : Props) {
                     e.stopPropagation()
                     showPrev()
                     }}>
-                    ⭠
+                    <ArrowLeft className='size-7' />
                 </button>
 
                 <Image ref={imageRef} className={dimensions ? (dimensions.height > dimensions.width ? "md:w-[500px] md:h-auto" : "md:h-[500px] md:w-auto") : ""} src={imagePath} width={dimensions ? dimensions.width : 100} alt={name!} height={dimensions ? dimensions.height : 100} />
@@ -91,7 +92,7 @@ export default function Lightbox({artworks, dimensionsArray} : Props) {
                     e.stopPropagation()
                     showNext()
                     }}>
-                    ⭢
+                    <ArrowRight className='size-7' />
                 </button>
                 <button className='text-white p-4 fixed top-0 right-0 text-4xl cursor-pointer font-sans outline-none'>X</button>
             </>

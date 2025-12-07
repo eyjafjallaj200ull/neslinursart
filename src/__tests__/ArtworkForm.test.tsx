@@ -1,6 +1,8 @@
 import { render, screen, fireEvent } from "@testing-library/react"
 import ArtworkForm from "@/app/dashboard/_components/ArtworkForm"
 
+//just testing the workflow
+
 describe("ArtworkForm", () => {
     it("renders form with empty fields when no artwork prop is provided", () => {
         render(<ArtworkForm />)

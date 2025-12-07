@@ -27,6 +27,6 @@ describe("ArtworkForm", () => {
         expect(titleInput.value).toBe("Steamy Forest")
         expect(yearInput.value).toBe("2021")
         expect(imageInput.value).toBe("")
-        expect(displayedImage.src).toContain("/images/steamy-forest.jpg")
+        expect(displayedImage.src).toContain("/steamy-forest.jpg")
     })
 })

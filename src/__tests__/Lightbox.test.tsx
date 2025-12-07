@@ -12,7 +12,11 @@ const mockRouter = {
         const imageId = url.searchParams.get('imageId')
         mockSearchParams.set('imageId', imageId ? imageId : null)
     }),
-    replace: vi.fn()
+    replace: vi.fn().mockImplementation(path => {
+        const url = new URL('http://localhost' + path)
+        const imageId = url.searchParams.get('imageId')
+        mockSearchParams.set('imageId', imageId ? imageId : null)
+    })
 }
 
 vi.mock("next/navigation", () => ({
@@ -25,16 +29,16 @@ vi.mock("next/navigation", () => ({
 const showModalMock = vi.fn()
 const closeMock = vi.fn()
 
-// Add dialog element mock
+// Add dialog element mock - Is this a good idea?
 HTMLDialogElement.prototype.showModal = showModalMock
 HTMLDialogElement.prototype.close = closeMock
 
 
 // Mock test data
 const mockArtworks = [
-    { id: 1, name: "Artwork 1", year: 2020, imagePath: "artwork1.jpg" },
-    { id: 2, name: "Artwork 2", year: 2021, imagePath: "artwork2.jpg" },
-    { id: 3, name: "Artwork 3", year: 2022, imagePath: "artwork3.jpg" }
+    { id: 1, name: "Artwork 1", year: 2020, imagePath: "/artwork1.jpg" },
+    { id: 2, name: "Artwork 2", year: 2021, imagePath: "/artwork2.jpg" },
+    { id: 3, name: "Artwork 3", year: 2022, imagePath: "/artwork3.jpg" }
 ]
 
 const mockDimensions = [
@@ -65,17 +69,18 @@ describe("Lightbox", () => {
         
         // Check for content
         expect(screen.getByAltText("Artwork 1")).toBeInTheDocument()
-        expect(screen.getByText("⭠")).toBeInTheDocument()
-        expect(screen.getByText("⭢")).toBeInTheDocument()
-        expect(screen.getByText("X")).toBeInTheDocument()
+        expect(screen.getByTestId("Previous")).toBeInTheDocument()
+        expect(screen.getByTestId("Next")).toBeInTheDocument()
+        expect(screen.getByTestId("Close")).toBeInTheDocument()
     })
 
     it("changes image when next button is clicked", async () => {
+        const user = userEvent.setup()
         mockRouter.push("/portfolio?imageId=1")
         const {rerender} = render(<Lightbox artworks={mockArtworks} dimensionsArray={mockDimensions} />)
         
-        const nextButton = screen.getByText("⭢")
-        await userEvent.click(nextButton)
+        const nextButton = screen.getByTestId("Next")
+        await user.click(nextButton)
 
         rerender(<Lightbox artworks={mockArtworks} dimensionsArray={mockDimensions} />)
         
@@ -87,11 +92,12 @@ describe("Lightbox", () => {
         
     })
     it("changes image when prev button is clicked", async () => {
+        const user = userEvent.setup()
         mockRouter.push("/portfolio?imageId=2")
         const {rerender} = render(<Lightbox artworks={mockArtworks} dimensionsArray={mockDimensions} />)
         
-        const prevButton = screen.getByText("⭠")
-        await userEvent.click(prevButton)
+        const prevButton = screen.getByTestId("Previous")
+        await user.click(prevButton)
 
         rerender(<Lightbox artworks={mockArtworks} dimensionsArray={mockDimensions} />)
 
@@ -102,25 +108,27 @@ describe("Lightbox", () => {
         expect(imageAfterClick).toBeInTheDocument()
     })
 
-    it("closes dialog when close button is clicked", () => {
+    it("closes dialog when close button is clicked", async () => {
+        const user = userEvent.setup()
         mockSearchParams.set("imageId", "1")
-        render(<Lightbox artworks={mockArtworks} dimensionsArray={mockDimensions} />)
+        const { rerender } = render(<Lightbox artworks={mockArtworks} dimensionsArray={mockDimensions} />)
         
-        const closeButton = screen.getByText("X")
-        fireEvent.click(closeButton)
+        const closeButton = screen.getByTestId("Close")
+        await user.click(closeButton)
 
-        expect(mockRouter.replace).toHaveBeenCalledWith(
-            "/portfolio",
-            { scroll: false }
-        )
+        rerender(<Lightbox artworks={mockArtworks} dimensionsArray={mockDimensions} />)
+
+        const image = screen.queryByAltText("Artwork 1")
+        expect(image).not.toBeInTheDocument()
     })
 
     it("wraps to first image when clicking next on last image", async () => {
+        const user = userEvent.setup()
         mockRouter.push("/portfolio?imageId=3")
         const {rerender} = render(<Lightbox artworks={mockArtworks} dimensionsArray={mockDimensions} />)
         
-        const nextButton = screen.getByText("⭢")
-        await userEvent.click(nextButton)
+        const nextButton = screen.getByTestId("Next")
+        await user.click(nextButton)
 
         rerender(<Lightbox artworks={mockArtworks} dimensionsArray={mockDimensions} />)
 
@@ -132,11 +140,12 @@ describe("Lightbox", () => {
     })
 
     it("wraps to last image when clicking prev on first image", async () => {
+        const user = userEvent.setup()
         mockRouter.push("/portfolio?imageId=1")
         const {rerender} = render(<Lightbox artworks={mockArtworks} dimensionsArray={mockDimensions} />)
         
-        const prevButton = screen.getByText("⭠")
-        await userEvent.click(prevButton)
+        const prevButton = screen.getByTestId("Previous")
+        await user.click(prevButton)
 
         rerender(<Lightbox artworks={mockArtworks} dimensionsArray={mockDimensions} />)
 

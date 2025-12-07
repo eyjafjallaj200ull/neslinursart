@@ -31,4 +31,5 @@ jobs:
       env:
         KINDE_ISSUER_URL: ${{ secrets.KINDE_ISSUER_URL }}
         GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        DATABASE_URL: ${{ secrets.DATABASE_URL }}
     - run: npm test

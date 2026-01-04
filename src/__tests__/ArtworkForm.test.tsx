@@ -11,7 +11,7 @@ describe("ArtworkForm", () => {
         const imageInput = screen.getByLabelText("Image") as HTMLInputElement
         expect(titleInput.value).toBe("")
         expect(yearInput.value).toBe("")
-        expect(imageInput.value).not.toBe("")
+        expect(imageInput.value).toBe("")
     })
 
     it("renders form with artwork data when artwork prop is provided", () => {
